@@ -10,6 +10,16 @@ function Square({ value, squareClick }) {
     );
 }
 
+function Restart({ restart }) {
+    return (
+        <>
+            <button onClick={restart} className="restart">
+                Restart
+            </button>
+        </>
+    );
+}
+
 export default function Board() {
     const [squares, setSquare] = useState(Array(9).fill(null));
     const [turn, setTurn] = useState(1);
@@ -25,11 +35,18 @@ export default function Board() {
         setSquare(newSquares);
     }
 
+    function resetBoard() {
+        setSquare(Array(9).fill(null));
+        setTurn(1);
+    }
+
     const winner = calculateWinner(squares);
     let status;
 
     if (winner) {
         status = "Winner: " + winner;
+    } else if (turn === 10) {
+        status = "Draw";
     } else {
         status = "Next player: " + (turn % 2 === 0 ? "O" : "X");
     }
@@ -51,6 +68,10 @@ export default function Board() {
                 <Square value={squares[6]} squareClick={() => handleClick(6)} />
                 <Square value={squares[7]} squareClick={() => handleClick(7)} />
                 <Square value={squares[8]} squareClick={() => handleClick(8)} />
+            </div>
+            <hr></hr>
+            <div className="restart">
+                <Restart restart={resetBoard}/>
             </div>
         </>
     );
