@@ -71,7 +71,7 @@ export default function Board() {
             </div>
             <hr></hr>
             <div className="restart">
-                <Restart restart={resetBoard}/>
+                <Restart restart={resetBoard} />
             </div>
         </>
     );
