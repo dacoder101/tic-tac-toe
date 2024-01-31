@@ -1,4 +1,13 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import io from "socket.io-client";
+
+const PORT = process.env.PORT || 8080;
+
+const socket = io(`http://localhost:${PORT}`);
+
+socket.on("connection", () => {
+    console.log("Connected to the server!");
+});
 
 function Square({ value, squareClick }) {
     return (
@@ -71,7 +80,7 @@ export default function Board() {
             </div>
             <hr></hr>
             <div className="restart">
-                <Restart restart={resetBoard}/>
+                <Restart restart={resetBoard} />
             </div>
         </>
     );
