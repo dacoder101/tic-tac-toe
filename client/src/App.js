@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 
-const PORT = process.env.PORT || 8080;
+const SOCKET_PORT = process.env.PORT || 4000;
 
-const socket = io(`http://localhost:${PORT}`);
+const URL =
+    process.env.NODE_ENV === "production"
+        ? undefined
+        : `http://localhost:${SOCKET_PORT}`;
 
-socket.on("connection", () => {
+export const socket = io(URL);
+
+socket.on("connect", () => {
     console.log("Connected to the server!");
 });
 
