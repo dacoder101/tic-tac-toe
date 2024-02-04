@@ -10,7 +10,7 @@ function Square({ value, squareClick }) {
     );
 }
 
-function Restart({ restart }) {
+/*function Restart({ restart }) {
     return (
         <>
             <button onClick={restart} className="restart">
@@ -18,26 +18,18 @@ function Restart({ restart }) {
             </button>
         </>
     );
-}
+}*/
 
-export default function Board() {
-    const [squares, setSquare] = useState(Array(9).fill(null));
-    const [turn, setTurn] = useState(1);
-
+function Board({ turn, squares, onPlay /*resetBoard*/ }) {
     function handleClick(i) {
         if (squares[i] || calculateWinner(squares)) {
             return;
         }
 
-        const newSquares = squares.slice();
-        newSquares[i] = turn % 2 === 0 ? "O" : "X";
-        setTurn(turn + 1);
-        setSquare(newSquares);
-    }
+        const nextSquares = squares.slice();
+        nextSquares[i] = turn % 2 === 0 ? "O" : "X";
 
-    function resetBoard() {
-        setSquare(Array(9).fill(null));
-        setTurn(1);
+        onPlay(nextSquares);
     }
 
     const winner = calculateWinner(squares);
@@ -69,10 +61,6 @@ export default function Board() {
                 <Square value={squares[7]} squareClick={() => handleClick(7)} />
                 <Square value={squares[8]} squareClick={() => handleClick(8)} />
             </div>
-            <hr></hr>
-            <div className="restart">
-                <Restart restart={resetBoard} />
-            </div>
         </>
     );
 }
@@ -99,4 +87,33 @@ function calculateWinner(squares) {
         }
     }
     return null;
+}
+
+export default function Game() {
+    const [history, setHistory] = useState([Array(9).fill(null)]);
+    const [turn, setTurn] = useState(1);
+    const currentSquares = history[history.length - 1];
+
+    function handlePlay(nextSquares) {
+        setHistory([...history, nextSquares]);
+        setTurn(turn + 1);
+    }
+
+    return (
+        <>
+            <div className="game">
+                <div className="game-board">
+                    <Board
+                        turn={turn}
+                        squares={currentSquares}
+                        onPlay={handlePlay}
+                        /*resetBoard={resetBoard}*/
+                    />
+                </div>
+            </div>
+            <div className="game-info">
+                <ol></ol>
+            </div>
+        </>
+    );
 }
